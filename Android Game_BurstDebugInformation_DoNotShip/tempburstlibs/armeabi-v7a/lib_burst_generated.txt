@@ -1,4 +1,4 @@
-Library: D:\6 - Mobile Games and AI for Simulation\Assignments\2 - Mobile Game For Android\Android Game\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated
+Library: C:\Users\Joe\Programming\AndroidDevelopment\AssignmentGyroArcher1\Android-Game\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated
 --platform=Android
 --backend=burst-llvm-16
 --target=ARMV7A_NEON32
@@ -7,6 +7,7 @@ Library: D:\6 - Mobile Games and AI for Simulation\Assignments\2 - Mobile Game F
 --dump=Function
 --float-precision=Standard
 --target-framework=NetFramework
+--assembly-defines=Assembly-CSharp;
 --assembly-defines=Mono.Security;
 --assembly-defines=mscorlib;
 --assembly-defines=System.Configuration;
@@ -20,12 +21,13 @@ Library: D:\6 - Mobile Games and AI for Simulation\Assignments\2 - Mobile Game F
 --assembly-defines=Unity.Collections.LowLevel.ILSupport;
 --assembly-defines=Unity.InternalAPIEngineBridge.001;
 --assembly-defines=Unity.Mathematics;
+--assembly-defines=Unity.TextMeshPro;
 --assembly-defines=UnityEngine;
 --generate-link-xml=Temp\burst.link.xml
---temp-folder=D:\6 - Mobile Games and AI for Simulation\Assignments\2 - Mobile Game For Android\Android Game\Temp\Burst
+--temp-folder=C:\Users\Joe\Programming\AndroidDevelopment\AssignmentGyroArcher1\Android-Game\Temp\Burst
 --key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.29f1/Editor/Data/PlaybackEngines/AndroidPlayer
---decode-folder=D:\6 - Mobile Games and AI for Simulation\Assignments\2 - Mobile Game For Android\Android Game\Library\Burst
---output=D:\6 - Mobile Games and AI for Simulation\Assignments\2 - Mobile Game For Android\Android Game\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated
+--decode-folder=C:\Users\Joe\Programming\AndroidDevelopment\AssignmentGyroArcher1\Android-Game\Library\Burst
+--output=C:\Users\Joe\Programming\AndroidDevelopment\AssignmentGyroArcher1\Android-Game\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 
 --method=Unity.Burst.BurstCompiler+BurstCompilerHelper, Unity.Burst, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::IsBurstEnabled()--8c2be93e18276203cbd918daa2748a10
