@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
 
     private SpriteRenderer sr_bowSprite;
     private UIManager script_UIManager;
-
+	private Animator fireAnimation;
     private int health = 3;
     private float rotationSpeed = 150.0f;
 
@@ -35,6 +35,17 @@ public class Player : MonoBehaviour
 		{
             transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
 		}
+
+		if (Input.touchCount>0) //If screen pressed
+		{
+			Shoot();
+		}
+	}
+
+	private void Shoot()
+	{
+		fireAnimation.SetTrigger("Fire");
+		fireAnimation.ResetTrigger("Reset");
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision)
