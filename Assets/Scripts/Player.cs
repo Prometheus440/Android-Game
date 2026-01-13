@@ -44,8 +44,8 @@ public class Player : MonoBehaviour
 
 	private void Shoot()
 	{
+		fireAnimation = GetComponent<Animator>();
 		fireAnimation.SetTrigger("Fire");
-		fireAnimation.ResetTrigger("Reset");
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision)
