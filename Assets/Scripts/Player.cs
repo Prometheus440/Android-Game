@@ -62,7 +62,8 @@ public class Player : MonoBehaviour
 	
 	private static Quaternion GyroToUnity(Quaternion q)
 	{
-		return new Quaternion(0,-q.y,0,0);
+		return new Quaternion(0,0,-q.y,q.w);
+		
 	}
 
 	private void ArrowType()
