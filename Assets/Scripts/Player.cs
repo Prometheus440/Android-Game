@@ -16,12 +16,19 @@ public class Player : MonoBehaviour
 	private Animator fireAnimation;
     private int health = 3;
     private float rotationSpeed = 150.0f;
-
+	private enum InputMode{Touch,Accel,Swipe}
+	private InputMode inpMode=InputMode.Touch;
+	Vector2 fingerDown;
+	Vector2 fingerUp;
+	Gyroscope m_Gyro;
+	Vector3 rot;
 
     void Start()
     {
         sr_bowSprite = GetComponent<SpriteRenderer>();
 		script_UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+		m_Gyro = Input.gyro;
+		Input.gyro.enabled=true;
     }
 
     void Update()
@@ -36,16 +43,41 @@ public class Player : MonoBehaviour
             transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
 		}
 
-		if (Input.touchCount>0) //If screen pressed
+		if(inpMode==InputMode.Touch)
 		{
 			Shoot();
 		}
+		TestGyro();
 	}
 
-	private void Shoot()
+	void TestGyro()
+    {
+		Quaternion quat = Quaternion.Euler(rot);
+        //Output the rotation rate, attitude and the enabled state of the gyroscope as a Label
+        Debug.Log("Gyro attitude" + m_Gyro.attitude);
+
+		quat = GyroToUnity(Input.gyro.attitude) ;
+		transform.rotation = quat;
+    }
+	
+	private static Quaternion GyroToUnity(Quaternion q)
 	{
+		return new Quaternion(0,-q.y,0,0);
+	}
+
+	private void ArrowType()
+	{
+		print("Swipe");
+	}
+
+
+	private void Shoot() //Shoots the bow
+	{
+		if(Input.touchCount>0)//When screen pressed
+		{
 		fireAnimation = GetComponent<Animator>();
-		fireAnimation.SetTrigger("Fire");
+		fireAnimation.SetTrigger("Fire"); //Plays firing animation
+		}
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision)
