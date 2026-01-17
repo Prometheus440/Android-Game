@@ -4,66 +4,61 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Placeholders for phone input
-    // =======================================================
-    private KeyCode KeyLeft = KeyCode.LeftArrow;
-    private KeyCode KeyRight = KeyCode.RightArrow;
-    private KeyCode KeyFire = KeyCode.UpArrow;
-    // =======================================================
-
-    private SpriteRenderer sr_bowSprite;
-    private UIManager script_UIManager;
+	private SpriteRenderer bowSprite;
+	private UIManager UIManagerScript;
+	private ArrowProjectile arrowProjectileScript;
 	private Animator fireAnimation;
-    private int health = 3;
-    private float rotationSpeed = 150.0f;
-	private enum InputMode{Touch,Accel,Swipe}
-	private InputMode inpMode=InputMode.Touch;
+	private int health = 3;
+	private float rotationSpeed = 150.0f;
+	private bool canFire = true;
+	private enum InputMode { Touch, Accel, Swipe }
+	private InputMode inpMode = InputMode.Touch;
 	Vector2 fingerDown;
 	Vector2 fingerUp;
 	Gyroscope m_Gyro;
 	Vector3 rot;
 
-    void Start()
-    {
-        sr_bowSprite = GetComponent<SpriteRenderer>();
-		script_UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+	// Animation times
+	[SerializeField] private float arrowReleaseTime = 0.4f;
+	[SerializeField] private float animationDuration = 0.83f;
+	private bool isFiring;
+
+	void Start()
+	{
+		bowSprite = GetComponent<SpriteRenderer>();
+		UIManagerScript = GameObject.Find("Canvas").GetComponent<UIManager>();
+		arrowProjectileScript = GetComponent<ArrowProjectile>();
+		fireAnimation = GetComponent<Animator>();
 		m_Gyro = Input.gyro;
-		Input.gyro.enabled=true;
-    }
+		Input.gyro.enabled = true;
+	}
 
-    void Update()
-    {
-		// Rotation
-		if (Input.GetKey(KeyLeft))
-		{
-            transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
-		}
-		if (Input.GetKey(KeyRight))
-		{
-            transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
-		}
-
-		if(inpMode==InputMode.Touch)
+	void Update()
+	{
+		if (inpMode == InputMode.Touch)
 		{
 			Shoot();
 		}
-		TestGyro();
+
+		if (!isFiring)
+		{
+			TestGyro();
+		}
 	}
 
 	void TestGyro()
-    {
+	{
 		Quaternion quat = Quaternion.Euler(rot);
-        //Output the rotation rate, attitude and the enabled state of the gyroscope as a Label
-        Debug.Log("Gyro attitude" + m_Gyro.attitude);
+		//Output the rotation rate, attitude and the enabled state of the gyroscope as a Label
+		Debug.Log("Gyro attitude" + m_Gyro.attitude);
 
-		quat = GyroToUnity(Input.gyro.attitude) ;
+		quat = GyroToUnity(Input.gyro.attitude);
 		transform.rotation = quat;
-    }
-	
+	}
+
 	private static Quaternion GyroToUnity(Quaternion q)
 	{
-		return new Quaternion(0,0,-q.y,q.w);
-		
+		return new Quaternion(0, 0, -q.y, q.w);
 	}
 
 	private void ArrowType()
@@ -74,12 +69,37 @@ public class Player : MonoBehaviour
 
 	private void Shoot() //Shoots the bow
 	{
-		if(Input.touchCount>0)//When screen pressed
+		// PC TESTING
+		if (Input.GetMouseButtonDown(0) && canFire)
 		{
-		fireAnimation = GetComponent<Animator>();
-		fireAnimation.SetTrigger("Fire"); //Plays firing animation
+			StartCoroutine(FireSequence());
+		}
+
+		if (Input.touchCount > 0 && canFire)// When screen pressed
+		{
+			StartCoroutine(FireSequence());
 		}
 	}
+
+	private IEnumerator FireSequence()
+	{
+		canFire = false;
+		isFiring = true;
+
+		fireAnimation.Rebind();
+		fireAnimation.Update(0f);
+		fireAnimation.Play("EnchantedBowFire", 0, 0f); // Plays firing animation
+
+		// Wait to spawn arrow prefab
+		yield return new WaitForSeconds(arrowReleaseTime);
+		arrowProjectileScript.SpawnArrow();
+
+		// Wait to be able to fire again
+		yield return new WaitUntil(() => fireAnimation.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f && !fireAnimation.IsInTransition(0));
+		canFire = true;
+		isFiring = false;
+	}
+
 
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
@@ -91,7 +111,7 @@ public class Player : MonoBehaviour
 			{
 				health--;
 				StartCoroutine(FlashRed());
-				script_UIManager.UpdateLives(health);
+				UIManagerScript.UpdateLives(health);
 			}
 
 			// Death
@@ -107,9 +127,9 @@ public class Player : MonoBehaviour
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			sr_bowSprite.color = Color.red;
+			bowSprite.color = Color.red;
 			yield return new WaitForSeconds(0.1f);
-			sr_bowSprite.color = Color.white;
+			bowSprite.color = Color.white;
 			yield return new WaitForSeconds(0.1f);
 		}
 	}

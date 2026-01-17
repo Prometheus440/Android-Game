@@ -2777,6 +2777,7 @@ GameObject:
   - component: {fileID: 1978721015}
   - component: {fileID: 1978721016}
   - component: {fileID: 1978721017}
+  - component: {fileID: 1978721018}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2796,6 +2797,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d47443c21c749f4890cee63ef8a7046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowReleaseTime: 0.4
+  animationDuration: 0.83
 --- !u!212 &1978721013
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2956,6 +2959,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1978721018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978721011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 064260d49da3ef24091a3c8d24613c9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowObject: {fileID: 3268201464148817524, guid: d18fec675f142104c9aed7071f8cc9b3, type: 3}
+  bowObject: {fileID: 1978721011}
+  speed: 20
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &2027304191
 GameObject:
   m_ObjectHideFlags: 0
