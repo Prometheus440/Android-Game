@@ -25,6 +25,7 @@ Library: D:\6 - Mobile Games and AI for Simulation\Assignments\2 - Mobile Game F
 --assembly-defines=UnityEngine;
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\6 - Mobile Games and AI for Simulation\Assignments\2 - Mobile Game For Android\Android-Game\Temp\Burst
+--debug=Full
 --key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.29f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=D:\6 - Mobile Games and AI for Simulation\Assignments\2 - Mobile Game For Android\Android-Game\Library\Burst
 --output=D:\6 - Mobile Games and AI for Simulation\Assignments\2 - Mobile Game For Android\Android-Game\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Bounds
   layers:
   - Default
   - TransparentFX
@@ -14,10 +15,10 @@ TagManager:
   - UI
   - 
   - 
-  - Obstacle
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Environment
+  - Projectile
   - 
   - 
   - 
@@ -45,7 +46,13 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Foreground
+  - name: Enemies
+    uniqueID: 4237639123
+    locked: 0
+  - name: Trees
+    uniqueID: 3007895827
+    locked: 0
+  - name: Player
     uniqueID: 639094629
     locked: 0
   - name: UI

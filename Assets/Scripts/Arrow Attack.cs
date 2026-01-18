@@ -11,5 +11,9 @@ public class ArrowAttack : MonoBehaviour
 			Destroy(collision.gameObject);
 			Destroy(gameObject);
 		}
+		if (collision.gameObject.tag == "Bounds")
+		{
+			Destroy(gameObject);
+		}
 	}
 }
