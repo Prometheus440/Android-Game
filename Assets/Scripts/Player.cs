@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
 		// If collision with an enemy
-		if (collision.gameObject.CompareTag("Enemy"))
+		if (collision.gameObject.CompareTag("Basic Enemy"))
 		{
 			// Damage
 			if (health > 0)

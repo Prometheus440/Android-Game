@@ -9,68 +9,20 @@ public abstract class Enemy : MonoBehaviour
     protected int damage;
     protected float movementSpeed;
 
-	// Pathfinding
-	protected AStar aStarScript;
-	protected List<Vector3> pathFound = new List<Vector3>();
-	protected GameObject player;
+    protected abstract void Move();
 
-	protected virtual void Start()
+	void OnCollisionEnter2D(Collision2D collision)
 	{
-		aStarScript = GameObject.FindObjectOfType<AStar>();
-		player = GameObject.FindGameObjectWithTag("Player");
-	}
-
-	protected virtual void Update()
-	{
-		if (player != null && health > 0)
+		// If collision with an enemy
+		if (collision.gameObject.CompareTag("Arrow"))
 		{
-			FindPathToPlayer();
-			Move();
-		}
-	}
+			health--;
+			Destroy(collision.gameObject);
 
-	protected void FindPathToPlayer()
-	{
-		if (aStarScript != null && player != null)
-		{
-			List<Node> path = aStarScript.RequestPath(this.gameObject, player);
-
-			if (path != null && path.Count > 0)
+			if (health <= 0)
 			{
-				pathFound.Clear();
-
-				foreach (Node node in path)
-				{
-					pathFound.Add(node.nodePos);
-				}
+				Destroy(gameObject);
 			}
 		}
-	}
-
-	protected abstract void Move();
-
-	protected virtual void OnCollisionEnter2D(Collision2D collision)
-	{
-		if (health > 0)
-		{
-			if (collision.gameObject.tag == "Arrow")
-			{
-				health--;
-			}
-		}
-		else if (health <= 0)
-		{
-			Destroy(gameObject);
-		}
-	}
-
-	protected Vector3 GetNextPathPosition()
-	{
-		if (pathFound != null && pathFound.Count > 0)
-		{
-			return pathFound[0];
-		}
-
-		return transform.position;
 	}
 }
