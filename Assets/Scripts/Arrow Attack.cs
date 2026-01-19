@@ -8,7 +8,6 @@ public class ArrowAttack : MonoBehaviour
 	{
 		if (collision.gameObject.tag == "Enemy")
 		{
-			Destroy(collision.gameObject);
 			Destroy(gameObject);
 		}
 	}
