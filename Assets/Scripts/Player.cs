@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
 	Vector2 fingerUp;
 	Gyroscope m_Gyro;
 	Vector3 rot;
+	Vector2 fingerTouchDown;
+	Vector2 fingerTouchUp;
 
     void Start()
     {
@@ -43,18 +45,49 @@ public class Player : MonoBehaviour
             transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
 		}
 
-		if(inpMode==InputMode.Touch)
+		if(Input.touchCount == 1)
+		{
+			if(Input.touches[0].phase == TouchPhase.Began)
+			{
+				fingerTouchDown = Input.touches[0].position;
+			}
+			if(Input.touches[0].phase == TouchPhase.Ended)
+			{
+				fingerTouchUp = Input.touches[0].position;
+				CheckSipe();
+			}
+		}
+		
+		TestGyro();
+	}
+	void CheckSipe()
+	{
+		if(fingerTouchDown.x - fingerTouchUp.x < -100)
+		{
+			SwipeRight();
+		}
+		if(fingerTouchDown.x - fingerTouchUp.x > 100)
+		{
+			SwipeLeft();
+		}
+		if(fingerTouchDown.x - fingerTouchUp.x > -100 && fingerTouchDown.x - fingerTouchUp.x < 100)
 		{
 			Shoot();
 		}
-		TestGyro();
+	}
+	void SwipeLeft()
+	{
+		Debug.Log("Left");
+	}
+
+	void SwipeRight()
+	{
+		Debug.Log("Right");
 	}
 
 	void TestGyro()
     {
 		Quaternion quat = Quaternion.Euler(rot);
-        //Output the rotation rate, attitude and the enabled state of the gyroscope as a Label
-        Debug.Log("Gyro attitude" + m_Gyro.attitude);
 
 		quat = GyroToUnity(Input.gyro.attitude) ;
 		transform.rotation = quat;
