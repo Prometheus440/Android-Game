@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -24,6 +25,12 @@ public class Player : MonoBehaviour
 	Vector3 rot;
 	Vector2 fingerTouchDown;
 	Vector2 fingerTouchUp;
+	GameObject regularArrow;
+	GameObject explosiveArrow;
+	GameObject enchantedArrow;
+	Transform middleArrow;
+	Transform leftArrow;
+	Transform rightArrow;
 
     void Start()
     {
@@ -31,6 +38,12 @@ public class Player : MonoBehaviour
 		script_UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 		m_Gyro = Input.gyro;
 		Input.gyro.enabled=true;
+		regularArrow = GameObject.Find("Regular Arrow");
+		explosiveArrow = GameObject.Find("Explosive Arrow");
+		enchantedArrow = GameObject.Find("Enchanted Arrow");
+		middleArrow = GameObject.Find("Middle Arrow").GetComponent<Transform>();
+		leftArrow = GameObject.Find("Left Arrow").GetComponent<Transform>();
+		rightArrow = GameObject.Find("Right Arrow").GetComponent<Transform>();
     }
 
     void Update()
@@ -82,7 +95,48 @@ public class Player : MonoBehaviour
 
 	void SwipeRight()
 	{
-		Debug.Log("Right");
+			if(regularArrow.transform.position == middleArrow.position)
+			{
+				Debug.Log("Test1");
+				ArrowPosition1();
+				return;
+			}
+			if(regularArrow.transform.position == rightArrow.position)
+			{
+				Debug.Log("Test2");
+				ArrowPosition2();
+				return;
+			}
+			if(regularArrow.transform.position == leftArrow.position)
+			{
+				Debug.Log("Test3");
+				ArrowPosition3();
+				return;
+			}
+			
+		
+	
+		
+		
+	}
+
+	void ArrowPosition1()
+	{
+		explosiveArrow.transform.position = middleArrow.transform.position;
+		regularArrow.transform.position = rightArrow.transform.position;
+		enchantedArrow.transform.position = leftArrow.transform.position;
+	}
+	void ArrowPosition2()
+	{
+		explosiveArrow.transform.position = rightArrow.transform.position;
+		regularArrow.transform.position = leftArrow.transform.position;
+		enchantedArrow.transform.position = middleArrow.transform.position;
+	}
+	void ArrowPosition3()
+	{
+		explosiveArrow.transform.position = leftArrow.transform.position;
+		regularArrow.transform.position = middleArrow.transform.position;
+		enchantedArrow.transform.position = rightArrow.transform.position;
 	}
 
 	void TestGyro()
@@ -97,11 +151,6 @@ public class Player : MonoBehaviour
 	{
 		return new Quaternion(0,0,-q.y,q.w);
 		
-	}
-
-	private void ArrowType()
-	{
-		print("Swipe");
 	}
 
 
