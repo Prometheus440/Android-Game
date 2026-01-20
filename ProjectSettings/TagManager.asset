@@ -9,6 +9,7 @@ TagManager:
   - Basic Enemy
   - Tank Enemy
   - Fast Enemy
+  - Heal
   layers:
   - Default
   - TransparentFX
