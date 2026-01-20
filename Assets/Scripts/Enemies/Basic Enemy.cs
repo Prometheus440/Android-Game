@@ -17,6 +17,7 @@ public class BasicEnemy : Enemy
     {
         health = 2;
         movementSpeed = 15f;
+        scoreValue = 100;
 
         // Find the player
         player = GameObject.FindGameObjectWithTag("Player");

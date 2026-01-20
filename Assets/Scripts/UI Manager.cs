@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,12 +19,26 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Image img_enchArrows;
 	[SerializeField] private Sprite[] sp_enchArrows;
 
+	// Score
+	[SerializeField] private TMP_Text scoreText;
+	private int currentScore = 0;
+
 	//private Game_Manager script_gameManager;
 
 	void Start()
 	{
 		//TMP_gameOverText.gameObject.SetActive(false);
 		//script_gameManager = GameObject.Find("Canvas").GetComponent<Game_Manager>();
+
+		Enemy.OnEnemyKilled += AddScore; // Subscribe
+		UpdateScore(0);
+	}
+
+	void OnDestroy()
+	{
+		// Unsubscribe to enemy kill events
+		Enemy.OnEnemyKilled -= AddScore;
+
 	}
 
 	public void UpdateLives(int currentLives)
@@ -33,6 +49,17 @@ public class UIManager : MonoBehaviour
 		{
 			//GameOverSequence();
 		}
+	}
+	public void UpdateScore(int score)
+	{
+		currentScore = score;
+		scoreText.text = "Score: " + currentScore.ToString();
+	}
+
+	public void AddScore(int score)
+	{
+		currentScore += score;
+		scoreText.text = "Score: " + currentScore.ToString();
 	}
 
 	/*

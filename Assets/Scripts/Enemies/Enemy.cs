@@ -7,9 +7,11 @@ public abstract class Enemy : MonoBehaviour
 	// Enemy variables
     protected int health;
     protected int damage;
+	protected int scoreValue;
     protected float movementSpeed;
 
-	public static event System.Action<Vector2> OnEnemyDeath;
+	public static event System.Action<Vector2> OnEnemyDeath; // For collecting position for healing
+	public static event System.Action<int> OnEnemyKilled; // For collecting score per enemy
 
     protected abstract void Move();
 
@@ -23,8 +25,9 @@ public abstract class Enemy : MonoBehaviour
 
 			if (health <= 0)
 			{
-				// Invoke event before destroying enemy
+				// Invoke events before destroying enemy
 				OnEnemyDeath?.Invoke(transform.position);
+				OnEnemyKilled?.Invoke(scoreValue);
 				Destroy(gameObject);
             }
 		}

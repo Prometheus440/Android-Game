@@ -17,6 +17,7 @@ public class FastEnemy : Enemy
     {
         health = 1;
         movementSpeed = 25f;
+        scoreValue = 50;
 
         // Find the player
         player = GameObject.FindGameObjectWithTag("Player");

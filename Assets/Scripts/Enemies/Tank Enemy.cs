@@ -17,6 +17,7 @@ public class TankEnemy : Enemy
     {
         health = 5;
         movementSpeed = 5f;
+        scoreValue = 200;
 
         // Find the player
         player = GameObject.FindGameObjectWithTag("Player");
