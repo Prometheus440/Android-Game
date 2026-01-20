@@ -9,14 +9,13 @@ public abstract class Enemy : MonoBehaviour
     protected int damage;
     protected float movementSpeed;
 
-	public bool enemyKilled = false;
-	public Vector2 deathPos;
+	public static event System.Action<Vector2> OnEnemyDeath;
 
     protected abstract void Move();
 
 	void OnCollisionEnter2D(Collision2D collision)
 	{
-		// If collision with an enemy
+		// If collision with an arrow
 		if (collision.gameObject.CompareTag("Arrow"))
 		{
 			health--;
@@ -24,9 +23,9 @@ public abstract class Enemy : MonoBehaviour
 
 			if (health <= 0)
 			{
+				// Invoke event before destroying enemy
+				OnEnemyDeath?.Invoke(transform.position);
 				Destroy(gameObject);
-				enemyKilled = true;
-				deathPos = transform.position;
             }
 		}
 	}

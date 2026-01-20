@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
 	{
 		bowSprite = GetComponent<SpriteRenderer>();
 		UIManagerScript = GameObject.Find("Canvas").GetComponent<UIManager>();
+		UIManagerScript.UpdateLives(health);
 		arrowProjectileScript = GetComponent<ArrowProjectile>();
 		fireAnimation = GetComponent<Animator>();
 		m_Gyro = Input.gyro;
@@ -48,8 +49,8 @@ public class Player : MonoBehaviour
 	void TestGyro()
 	{
 		Quaternion quat = Quaternion.Euler(rot);
-		//Output the rotation rate, attitude and the enabled state of the gyroscope as a Label
-		Debug.Log("Gyro attitude" + m_Gyro.attitude);
+		// Output the rotation rate, attitude and the enabled state of the gyroscope as a Label
+		// Debug.Log("Gyro attitude" + m_Gyro.attitude);
 
 		quat = GyroToUnity(Input.gyro.attitude);
 		transform.rotation = quat;
@@ -68,12 +69,6 @@ public class Player : MonoBehaviour
 
 	private void Shoot() //Shoots the bow
 	{
-		// PC TESTING
-		if (Input.GetMouseButtonDown(0) && canFire)
-		{
-			StartCoroutine(FireSequence());
-		}
-
 		if (Input.touchCount > 0 && canFire)// When screen pressed
 		{
 			StartCoroutine(FireSequence());
@@ -99,61 +94,57 @@ public class Player : MonoBehaviour
 		isFiring = false;
 	}
 
+	public void Heal(int amount)
+	{
+		if (health < 3)
+		{
+			health = Mathf.Min(health + amount, 3); // Max health cap
+			UIManagerScript.UpdateLives(health);
+		}
+	}
+
+	public void TakeDamage(int damage)
+	{
+		// Damage
+		if (health > 0)
+		{
+			health -= damage;
+			StartCoroutine(FlashRed());
+			UIManagerScript.UpdateLives(health);
+		}
+		// Death
+		if (health <= 0)
+		{
+			Die();
+		}
+	}
+
+	public void Die()
+	{
+		Destroy(gameObject);
+	}
 
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
 		// If collision with an enemy
+		GameObject enemy = collision.gameObject;
+
+		// Amounts of damage per enemy type
 		if (collision.gameObject.CompareTag("Basic Enemy"))
 		{
-			// Damage
-			if (health > 0)
-			{
-				health--;
-				Destroy(collision.gameObject);
-				StartCoroutine(FlashRed());
-				UIManagerScript.UpdateLives(health);
-			}
-
-			// Death
-			if (health <= 0)
-			{
-				Destroy(gameObject);
-			}
+			TakeDamage(1);
+			Destroy(enemy);
 		}
-        if (collision.gameObject.CompareTag("Tank Enemy"))
-        {
-            // Damage
-            if (health > 0)
-            {
-                health = health - 2;
-				Destroy(collision.gameObject);
-                StartCoroutine(FlashRed());
-                UIManagerScript.UpdateLives(health);
-            }
-
-            // Death
-            if (health <= 0)
-            {
-                Destroy(gameObject);
-            }
-        }
-        if (collision.gameObject.CompareTag("Fast Enemy"))
-        {
-            // Damage
-            if (health > 0)
-            {
-                health--;
-                StartCoroutine(FlashRed());
-				Destroy(collision.gameObject);
-                UIManagerScript.UpdateLives(health);
-            }
-
-            // Death
-            if (health <= 0)
-            {
-                Destroy(gameObject);
-            }
-        }
+		if (collision.gameObject.CompareTag("Fast Enemy"))
+		{
+			TakeDamage(1);
+			Destroy(enemy);
+		}
+		if (collision.gameObject.CompareTag("Tank Enemy"))
+		{
+			TakeDamage(2);
+			Destroy(enemy);
+		}
     }
 
 	// Flashing red after damage

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1444724856011613996}
   - component: {fileID: 3000323568049849865}
   - component: {fileID: 8478579806713215095}
-  - component: {fileID: 1851910837839587945}
+  - component: {fileID: -6487193235168688574}
   m_Layer: 9
   m_Name: Heal
   m_TagString: Untagged
@@ -159,7 +159,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1851910837839587945
+--- !u!114 &-6487193235168688574
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,6 +168,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2931458959239603060}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08100f05e5663c7419487a7492872c93, type: 3}
+  m_Script: {fileID: 11500000, guid: f14c3d41bea3e7c40848a0e8e9e1abe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
