@@ -8,8 +8,7 @@ public class Player : MonoBehaviour
 	private UIManager UIManagerScript;
 	private ArrowProjectile arrowProjectileScript;
 	private Animator fireAnimation;
-	private int health = 3;
-	private float rotationSpeed = 150.0f;
+	public int health = 3;
 	private bool canFire = true;
 	private enum InputMode { Touch, Accel, Swipe }
 	private InputMode inpMode = InputMode.Touch;
