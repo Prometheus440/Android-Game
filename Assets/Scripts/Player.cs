@@ -110,6 +110,7 @@ public class Player : MonoBehaviour
 			if (health > 0)
 			{
 				health--;
+				Destroy(collision.gameObject);
 				StartCoroutine(FlashRed());
 				UIManagerScript.UpdateLives(health);
 			}
@@ -120,7 +121,41 @@ public class Player : MonoBehaviour
 				Destroy(gameObject);
 			}
 		}
-	}
+        if (collision.gameObject.CompareTag("Tank Enemy"))
+        {
+            // Damage
+            if (health > 0)
+            {
+                health = health - 2;
+				Destroy(collision.gameObject);
+                StartCoroutine(FlashRed());
+                UIManagerScript.UpdateLives(health);
+            }
+
+            // Death
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+        if (collision.gameObject.CompareTag("Fast Enemy"))
+        {
+            // Damage
+            if (health > 0)
+            {
+                health--;
+                StartCoroutine(FlashRed());
+				Destroy(collision.gameObject);
+                UIManagerScript.UpdateLives(health);
+            }
+
+            // Death
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
 
 	// Flashing red after damage
 	private IEnumerator FlashRed()
