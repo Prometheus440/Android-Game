@@ -12,8 +12,8 @@ public class PathfindingGrid : MonoBehaviour
 	LayerMask obstacleLayer;
 	public float nodeSize = 0.5f;
 	Vector2 gridNodes;
-	List<Node> openSet;
-	List<Node> closedSet;
+	Heap<Node> openSet;
+	HashSet<Node> closedSet;
 	Node currentNode;
 	List<Node> path;
 	bool pathFound;
@@ -75,29 +75,18 @@ public class PathfindingGrid : MonoBehaviour
 		Node rootNode = NodePositionInGrid(rootNodePos);
 		Node goalNode = NodePositionInGrid(goalNodePos);
 
-		openSet = new List<Node>();
-		closedSet = new List<Node>();
+		openSet = new Heap<Node>(grid.Length);
+		closedSet = new HashSet<Node>();
 
 		pathFound = false;
 		searching = true;
 
 		openSet.Add(rootNode);
-		currentNode = new Node(Vector3.zero, false, -1, -1);
 		float newMoveCost;
 
 		while (openSet.Count > 0 && searching)
 		{
-			currentNode = openSet[0];
-
-			for (int i = 0; i < openSet.Count; i++)
-			{
-				if (openSet[i].f < currentNode.f || openSet[i].f == currentNode.f && openSet[i].h < currentNode.h)
-				{
-					currentNode = openSet[i];
-				}
-			}
-
-			openSet.Remove(currentNode);
+			currentNode = openSet.RemoveTop();
 			closedSet.Add(currentNode);
 
 			if (currentNode == goalNode)

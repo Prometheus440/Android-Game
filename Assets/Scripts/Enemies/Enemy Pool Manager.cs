@@ -9,8 +9,8 @@ public class EnemyPoolManager : MonoBehaviour
     [SerializeField] private Transform fastEnemyPoolParent;
     [SerializeField] private Transform tankEnemyPoolParent;
 
-    // Wave variables
-    private int waveSize = 10;
+	// Wave variables
+	private int waveSize = 10;
     private float timeBetweenWaves = 3f;
     private float spawnDelay = 1f;
 
@@ -27,6 +27,13 @@ public class EnemyPoolManager : MonoBehaviour
     private int currentWave = 0;
     private bool isSpawningWave = false;
 
+    public static EnemyPoolManager Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         mainCamera = Camera.main;
@@ -36,17 +43,20 @@ public class EnemyPoolManager : MonoBehaviour
 
     void InitializePools()
     {
-        // Add enemies to the queues
-        foreach (Transform child in basicEnemyPoolParent)
-        {
-            basicEnemyPool.Enqueue(child.gameObject);
-        }
+		// Add enemies to the queues
+		foreach (Transform child in basicEnemyPoolParent)
+		{
+			child.gameObject.SetActive(false);
+			basicEnemyPool.Enqueue(child.gameObject);
+		}
 		foreach (Transform child in fastEnemyPoolParent)
 		{
+			child.gameObject.SetActive(false);
 			fastEnemyPool.Enqueue(child.gameObject);
 		}
 		foreach (Transform child in tankEnemyPoolParent)
 		{
+			child.gameObject.SetActive(false);
 			tankEnemyPool.Enqueue(child.gameObject);
 		}
 	}
@@ -177,6 +187,12 @@ public class EnemyPoolManager : MonoBehaviour
 
             // Reset enemy health
             var enemyScript = enemy.GetComponent<Enemy>();
+
+            if (enemyScript != null)
+            {
+                enemyScript.SetPoolManager(this);
+                enemyScript.ResetEnemy();
+            }
 
             return enemy;
         }

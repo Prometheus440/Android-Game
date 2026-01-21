@@ -139,17 +139,17 @@ public class Player : MonoBehaviour
 		if (collision.gameObject.CompareTag("Basic Enemy"))
 		{
 			TakeDamage(2);
-			Destroy(enemy);
+			EnemyPoolManager.Instance.ReturnEnemyToPool(enemy);
 		}
 		else if (collision.gameObject.CompareTag("Fast Enemy"))
 		{
 			TakeDamage(1);
-			Destroy(enemy);
+			EnemyPoolManager.Instance.ReturnEnemyToPool(enemy);
 		}
 		else if (collision.gameObject.CompareTag("Tank Enemy"))
 		{
 			TakeDamage(4);
-			Destroy(enemy);
+			EnemyPoolManager.Instance.ReturnEnemyToPool(enemy);
 		}
     }
 

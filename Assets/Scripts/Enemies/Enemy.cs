@@ -14,7 +14,12 @@ public abstract class Enemy : MonoBehaviour
 	public static event System.Action<Vector2> OnEnemyDeath; // For collecting position for healing
 	public static event System.Action<int> OnEnemyKilled; // For collecting score per enemy
 
-	private EnemyPoolManager poolManager;
+	protected EnemyPoolManager poolManager;
+
+	public void SetPoolManager(EnemyPoolManager manager)
+	{
+		poolManager = manager;
+	}
 
     protected abstract void Move();
 
