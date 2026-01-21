@@ -7,7 +7,7 @@ using UnityEngine;
 public class FastEnemy : Enemy
 {
     private List<Node> path;
-    private GameObject player;
+    private Player player;
 
     private float pathUpdateInterval = 0.3f;
     private float pathUpdateTimer = 0f;
@@ -16,11 +16,12 @@ public class FastEnemy : Enemy
     void Start()
     {
         health = 1;
+        spawnHealth = 1;
         movementSpeed = 25f;
         scoreValue = 50;
 
         // Find the player
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = Player.Instance;
 
         // So enemies don't update their path at the same time
         pathUpdateTimer = UnityEngine.Random.Range(0f, pathUpdateInterval);

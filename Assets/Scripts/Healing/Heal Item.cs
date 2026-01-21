@@ -6,10 +6,9 @@ public class HealItem : MonoBehaviour
 {
 	private Player playerScript;
 
-	// Start is called before the first frame update
 	void Start()
-    {
-		playerScript = FindObjectOfType<Player>();
+	{
+		playerScript = Player.Instance;
 	}
 
 	void OnCollisionEnter2D(Collision2D collision)

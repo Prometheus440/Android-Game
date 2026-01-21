@@ -7,7 +7,7 @@ using UnityEngine;
 public class TankEnemy : Enemy
 {
     private List<Node> path;
-    private GameObject player;
+    private Player player;
 
     private float pathUpdateInterval = 0.3f;
     private float pathUpdateTimer = 0f;
@@ -16,11 +16,12 @@ public class TankEnemy : Enemy
     void Start()
     {
         health = 5;
+        spawnHealth = 5;
         movementSpeed = 5f;
         scoreValue = 200;
 
         // Find the player
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = Player.Instance;
 
         // So enemies don't update their path at the same time
         pathUpdateTimer = UnityEngine.Random.Range(0f, pathUpdateInterval);

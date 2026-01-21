@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 	private SpriteRenderer bowSprite;
-	private UIManager UIManagerScript;
+	[SerializeField] private UIManager UIManagerScript;
 	private ArrowProjectile arrowProjectileScript;
 	private Animator fireAnimation;
 	public int health = 6;
@@ -22,10 +22,16 @@ public class Player : MonoBehaviour
 	[SerializeField] private float animationDuration = 0.83f;
 	private bool isFiring;
 
+	public static Player Instance;
+
+	void Awake()
+	{
+		Instance = this;
+	}
+
 	void Start()
 	{
 		bowSprite = GetComponent<SpriteRenderer>();
-		UIManagerScript = GameObject.Find("Canvas").GetComponent<UIManager>();
 		UIManagerScript.UpdateLives(health);
 		arrowProjectileScript = GetComponent<ArrowProjectile>();
 		fireAnimation = GetComponent<Animator>();
@@ -135,12 +141,12 @@ public class Player : MonoBehaviour
 			TakeDamage(2);
 			Destroy(enemy);
 		}
-		if (collision.gameObject.CompareTag("Fast Enemy"))
+		else if (collision.gameObject.CompareTag("Fast Enemy"))
 		{
 			TakeDamage(1);
 			Destroy(enemy);
 		}
-		if (collision.gameObject.CompareTag("Tank Enemy"))
+		else if (collision.gameObject.CompareTag("Tank Enemy"))
 		{
 			TakeDamage(4);
 			Destroy(enemy);

@@ -5,9 +5,9 @@ using UnityEngine;
 public class EnemyPoolManager : MonoBehaviour
 {
     // Prefabs to be spawned
-    [SerializeField] private GameObject basicEnemyPrefab;
-    [SerializeField] private GameObject fastEnemyPrefab;
-    [SerializeField] private GameObject tankEnemyPrefab;
+    [SerializeField] private Transform basicEnemyPoolParent;
+    [SerializeField] private Transform fastEnemyPoolParent;
+    [SerializeField] private Transform tankEnemyPoolParent;
 
     // Wave variables
     private int waveSize = 10;
@@ -15,7 +15,8 @@ public class EnemyPoolManager : MonoBehaviour
     private float spawnDelay = 1f;
 
     // Pool variables
-    private int poolSizePerType = 15;
+    private int poolSizePerType = 5;
+    private int activeEnemyCount = 0;
 
     private Queue<GameObject> basicEnemyPool = new Queue<GameObject>();
     private Queue<GameObject> fastEnemyPool = new Queue<GameObject>();
@@ -35,28 +36,20 @@ public class EnemyPoolManager : MonoBehaviour
 
     void InitializePools()
     {
-        // Create basic pool
-        for (int i = 0; i < poolSizePerType; i++)
+        // Add enemies to the queues
+        foreach (Transform child in basicEnemyPoolParent)
         {
-            GameObject obj = Instantiate(basicEnemyPrefab);
-			obj.SetActive(false); // Turn off in heirarchy
-            basicEnemyPool.Enqueue(obj);
+            basicEnemyPool.Enqueue(child.gameObject);
         }
-        // Create fast pool
-        for (int i = 0; i < poolSizePerType; i++)
-        {
-            GameObject obj = Instantiate(fastEnemyPrefab);
-			obj.SetActive(false); // Turn off in heirarchy
-            fastEnemyPool.Enqueue(obj);
-        }
-        // Create tank pool
-        for (int i = 0; i < poolSizePerType; i++)
-        {
-            GameObject obj = Instantiate(tankEnemyPrefab);
-			obj.SetActive(false); // Turn off in heirarchy
-            tankEnemyPool.Enqueue(obj);
-        }
-    }
+		foreach (Transform child in fastEnemyPoolParent)
+		{
+			fastEnemyPool.Enqueue(child.gameObject);
+		}
+		foreach (Transform child in tankEnemyPoolParent)
+		{
+			tankEnemyPool.Enqueue(child.gameObject);
+		}
+	}
 
     IEnumerator WaveSystem()
     {
@@ -72,6 +65,7 @@ public class EnemyPoolManager : MonoBehaviour
     IEnumerator SpawnWave()
     {
         isSpawningWave = true;
+        activeEnemyCount = 0; // Reset per wave
 
         // Spawn around the camera
         List<Vector2> spawnPos = GenerateSpawnPositions(waveSize);
@@ -88,9 +82,10 @@ public class EnemyPoolManager : MonoBehaviour
             {
                 enemy.transform.position = spawnPos[i];
                 enemy.SetActive(true); // Active in heirarchy
+                activeEnemyCount++; // Track number of active enemies
             }
 
-            yield return new WaitForSeconds(timeBetweenWaves);
+            yield return new WaitForSeconds(spawnDelay);
         }
 
         isSpawningWave = false;
@@ -192,6 +187,7 @@ public class EnemyPoolManager : MonoBehaviour
     public void ReturnEnemyToPool(GameObject enemy)
     {
         enemy.SetActive(false);
+        activeEnemyCount--;
 
         // Add back to type pool
         if (enemy.CompareTag("Basic Enemy"))
@@ -210,38 +206,6 @@ public class EnemyPoolManager : MonoBehaviour
 
     bool AreAllEnemiesDefeated()
     {
-        if (isSpawningWave)
-        {
-            return false;
-        }
-
-        // Check for living enemies
-        GameObject[] basicEnemies = GameObject.FindGameObjectsWithTag("Basic Enemy");
-        GameObject[] fastEnemies = GameObject.FindGameObjectsWithTag("Fast Enemy");
-        GameObject[] tankEnemies = GameObject.FindGameObjectsWithTag("Tank Enemy");
-
-        foreach (var enemy in basicEnemies)
-        {
-            if (enemy.activeInHierarchy)
-            {
-                return false;
-            }
-        }
-        foreach (var enemy in fastEnemies)
-        {
-            if (enemy.activeInHierarchy)
-            {
-                return false;
-            }
-        }
-        foreach (var enemy in tankEnemies)
-        {
-            if (enemy.activeInHierarchy)
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return !isSpawningWave && activeEnemyCount <= 0;
     }
 }

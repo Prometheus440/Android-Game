@@ -8,14 +8,13 @@ public class Heal : MonoBehaviour
     // 15% of spawn at enemy position
     // If arrow shoots heal object, player health + 1
 
-    private Player playerScript;
+    [SerializeField] private Player playerScript;
     [SerializeField] private GameObject healPrefab;
     private int spawnPercentage = 20;
     private int spawnInt;
 
     void Start()
     {
-        playerScript = FindObjectOfType<Player>();
         Enemy.OnEnemyDeath += Spawn; // Subscribe to enemy death events
     }
 
@@ -23,7 +22,6 @@ public class Heal : MonoBehaviour
     {
         // Unsubscribe to enemy death events
         Enemy.OnEnemyDeath -= Spawn;
-
     }
 
     void Spawn(Vector2 deathPos)
