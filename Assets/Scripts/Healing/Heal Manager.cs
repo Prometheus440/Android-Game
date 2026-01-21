@@ -28,7 +28,7 @@ public class Heal : MonoBehaviour
 
     void Spawn(Vector2 deathPos)
     {
-        if (playerScript.health < 3)
+        if (playerScript.health < 6)
         {
             // Inclusive min and exlusive max
             spawnInt = UnityEngine.Random.Range(1, 101);

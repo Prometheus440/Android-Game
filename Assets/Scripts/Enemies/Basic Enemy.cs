@@ -15,7 +15,7 @@ public class BasicEnemy : Enemy
 
     void Start()
     {
-        health = 2;
+        health = 1;
         movementSpeed = 15f;
         scoreValue = 100;
 

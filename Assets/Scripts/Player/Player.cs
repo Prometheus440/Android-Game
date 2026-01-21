@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 	private UIManager UIManagerScript;
 	private ArrowProjectile arrowProjectileScript;
 	private Animator fireAnimation;
-	public int health = 3;
+	public int health = 6;
 	private bool canFire = true;
 	private enum InputMode { Touch, Accel, Swipe }
 	private InputMode inpMode = InputMode.Touch;
@@ -96,9 +96,9 @@ public class Player : MonoBehaviour
 
 	public void Heal(int amount)
 	{
-		if (health < 3)
+		if (health < 6)
 		{
-			health = Mathf.Min(health + amount, 3); // Max health cap
+			health = Mathf.Min(health + amount, 6); // Max health cap
 			UIManagerScript.UpdateLives(health);
 		}
 	}
@@ -132,7 +132,7 @@ public class Player : MonoBehaviour
 		// Amounts of damage per enemy type
 		if (collision.gameObject.CompareTag("Basic Enemy"))
 		{
-			TakeDamage(1);
+			TakeDamage(2);
 			Destroy(enemy);
 		}
 		if (collision.gameObject.CompareTag("Fast Enemy"))
@@ -142,7 +142,7 @@ public class Player : MonoBehaviour
 		}
 		if (collision.gameObject.CompareTag("Tank Enemy"))
 		{
-			TakeDamage(2);
+			TakeDamage(4);
 			Destroy(enemy);
 		}
     }

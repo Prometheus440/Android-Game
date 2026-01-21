@@ -8,16 +8,13 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
 	// Hearts
-	[SerializeField] private Image img_lives;
-	[SerializeField] private Sprite[] sp_lives;
+	[SerializeField] private Image livesImage;
+	[SerializeField] private Sprite[] heartsSprite;
 
 	//Arrows
-	[SerializeField] private Image img_regArrows;
-	[SerializeField] private Sprite[] sp_regArrows;
-	[SerializeField] private Image img_explArrows;
-	[SerializeField] private Sprite[] sp_explArrows;
-	[SerializeField] private Image img_enchArrows;
-	[SerializeField] private Sprite[] sp_enchArrows;
+	[SerializeField] private Image regArrowsImg;
+	[SerializeField] private Image explArrowsImg;
+	[SerializeField] private Image enchArrowsImg;
 
 	// Score
 	[SerializeField] private TMP_Text scoreText;
@@ -43,9 +40,10 @@ public class UIManager : MonoBehaviour
 
 	public void UpdateLives(int currentLives)
 	{
-		img_lives.sprite = sp_lives[currentLives];
+		currentLives = Mathf.Clamp(currentLives, 0, heartsSprite.Length - 1);
+		livesImage.sprite = heartsSprite[currentLives];
 
-		if (currentLives == 0)
+		if (currentLives <= 0)
 		{
 			//GameOverSequence();
 		}
