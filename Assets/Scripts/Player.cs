@@ -90,29 +90,40 @@ public class Player : MonoBehaviour
 	}
 	void SwipeLeft()
 	{
-		Debug.Log("Left");
+		if(regularArrow.transform.position == middleArrow.position)
+		{
+			ArrowPositionLeft1();
+			return;
+		}
+		if(regularArrow.transform.position == leftArrow.position)
+		{
+			ArrowPositionLeft2();
+			return;
+		}
+		if(regularArrow.transform.position == rightArrow.position)
+		{
+			ArrowPositionLeft3();
+			return;
+		}
 	}
 
 	void SwipeRight()
 	{
-			if(regularArrow.transform.position == middleArrow.position)
-			{
-				Debug.Log("Test1");
-				ArrowPosition1();
-				return;
-			}
-			if(regularArrow.transform.position == rightArrow.position)
-			{
-				Debug.Log("Test2");
-				ArrowPosition2();
-				return;
-			}
-			if(regularArrow.transform.position == leftArrow.position)
-			{
-				Debug.Log("Test3");
-				ArrowPosition3();
-				return;
-			}
+		if(regularArrow.transform.position == middleArrow.position)
+		{
+			ArrowPositionRight1();
+			return;
+		}
+		if(regularArrow.transform.position == rightArrow.position)
+		{
+			ArrowPositionRight2();
+			return;
+		}
+		if(regularArrow.transform.position == leftArrow.position)
+		{
+			ArrowPositionRight3();
+			return;
+		}
 			
 		
 	
@@ -120,19 +131,37 @@ public class Player : MonoBehaviour
 		
 	}
 
-	void ArrowPosition1()
+	void ArrowPositionRight1()
 	{
 		explosiveArrow.transform.position = middleArrow.transform.position;
 		regularArrow.transform.position = rightArrow.transform.position;
 		enchantedArrow.transform.position = leftArrow.transform.position;
 	}
-	void ArrowPosition2()
+	void ArrowPositionRight2()
 	{
 		explosiveArrow.transform.position = rightArrow.transform.position;
 		regularArrow.transform.position = leftArrow.transform.position;
 		enchantedArrow.transform.position = middleArrow.transform.position;
 	}
-	void ArrowPosition3()
+	void ArrowPositionRight3()
+	{
+		explosiveArrow.transform.position = leftArrow.transform.position;
+		regularArrow.transform.position = middleArrow.transform.position;
+		enchantedArrow.transform.position = rightArrow.transform.position;
+	}
+	void ArrowPositionLeft1()
+	{
+		explosiveArrow.transform.position = rightArrow.transform.position;
+		regularArrow.transform.position = leftArrow.transform.position;
+		enchantedArrow.transform.position = middleArrow.transform.position;
+	}
+	void ArrowPositionLeft2()
+	{
+		explosiveArrow.transform.position = middleArrow.transform.position;
+		regularArrow.transform.position = rightArrow.transform.position;
+		enchantedArrow.transform.position = leftArrow.transform.position;
+	}
+	void ArrowPositionLeft3()
 	{
 		explosiveArrow.transform.position = leftArrow.transform.position;
 		regularArrow.transform.position = middleArrow.transform.position;
