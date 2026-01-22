@@ -17,7 +17,7 @@ public class BasicEnemy : Enemy
     {
         health = 1;
         spawnHealth = 1;
-        movementSpeed = 15f;
+        movementSpeed = 10f;
         scoreValue = 100;
 
         // Find the player
@@ -47,24 +47,40 @@ public class BasicEnemy : Enemy
         }
     }
 
-    protected override void Move()
-    {
-        if (path != null && path.Count > 0)
-        {
-			Vector3 targetPos = FindCentre(path, lookAheadNodes);
+	void OnEnable()
+	{
+		path = null; // Clear previous path
+		pathUpdateTimer = UnityEngine.Random.Range(0, pathUpdateInterval); // Stagger updates
+	}
 
-            // Smooth movement
-            Vector3 smoothPos = Vector3.Lerp(transform.position, targetPos, movementSpeed * Time.deltaTime);
-            transform.position = new Vector3(smoothPos.x, smoothPos.y, 0);
-
-			if (Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(targetPos.x, targetPos.y)) < PathfindingGrid.Instance.nodeSize * 2)
-			{
-				path.RemoveAt(0);
-			}
+	protected override void Move()
+	{
+		if (path == null || path.Count == 0)
+		{
+			return; // No valid path
 		}
-    }
 
-    Vector3 FindCentre(List<Node> _path, int nodesToAverage)
+		Vector3 targetPos = FindCentre(path, lookAheadNodes);
+
+		// Only move if target is at a fair distance
+		float distanceToTarget = Vector2.Distance(transform.position, targetPos);
+
+		if (distanceToTarget > PathfindingGrid.Instance.nodeSize * 10)
+		{
+			targetPos = path[0].nodePos; // Move towards first node
+		}
+
+		// Smooth movement
+		Vector3 smoothPos = Vector3.Lerp(transform.position, targetPos, movementSpeed * Time.deltaTime);
+		transform.position = new Vector3(smoothPos.x, smoothPos.y, 0);
+
+		if (Vector2.Distance(transform.position, targetPos) < PathfindingGrid.Instance.nodeSize * 2)
+		{
+			path.RemoveAt(0);
+		}
+	}
+
+	Vector3 FindCentre(List<Node> _path, int nodesToAverage)
     {
         int nodesToCheck = Mathf.Min(nodesToAverage, _path.Count);
 

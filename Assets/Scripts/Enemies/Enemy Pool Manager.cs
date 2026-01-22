@@ -12,7 +12,7 @@ public class EnemyPoolManager : MonoBehaviour
 	// Wave variables
 	private int waveSize = 10;
     private float timeBetweenWaves = 3f;
-    private float spawnDelay = 1f;
+    private float spawnDelay = 1.5f;
 
     // Pool variables
     private int poolSizePerType = 5;
@@ -23,7 +23,7 @@ public class EnemyPoolManager : MonoBehaviour
     private Queue<GameObject> tankEnemyPool = new Queue<GameObject>();
 
     private Camera mainCamera;
-    private float minY = 0.5f;
+    private float minY = 0.8f;
     private int currentWave = 0;
     private bool isSpawningWave = false;
 
@@ -107,20 +107,25 @@ public class EnemyPoolManager : MonoBehaviour
 
         // Calculate camera so that the enemies spawn around not in view
         float cameraHeight = 2f * mainCamera.orthographicSize;
-        float cameraWidth = 2f * mainCamera.aspect;
+        float cameraWidth = cameraHeight * mainCamera.aspect;
 
         Vector3 camPos = mainCamera.transform.position;
-        float spawnDistance = 5f; // Spawn this far away from view
 
-        float angleStep = 360f / count; // Divide the circle around the camera into segments
+        // Create an arc above the camera, too low and its too hard for player
+        float startAngle = 45f;
+        float endAngle = 135f;
+        float angleRange = endAngle - startAngle;
+        float angleStep = angleRange / (count - 1); // Divide the circle around the camera into segments
+
+        float spawnDistance = Mathf.Max(cameraWidth, cameraHeight) / 2f + 3f;
 
         for (int i = 0; i < count; i++)
         {
-            float angle = i * angleStep * Mathf.Deg2Rad;
+            float angle = (startAngle + i * angleStep) * Mathf.Deg2Rad;
 
             // Calculate position on circle
-            float x = camPos.x + Mathf.Cos(angle) * (cameraWidth * 2f * spawnDistance);
-            float y = camPos.y + Mathf.Sin(angle) * (cameraHeight * 2f * spawnDistance);
+            float x = camPos.x + Mathf.Cos(angle) * spawnDistance;
+            float y = camPos.y + Mathf.Sin(angle) * spawnDistance;
 
             // Clamp y to lower boundary, otherwise they come to fast and hard for player to see
             y = Mathf.Max(y, minY);

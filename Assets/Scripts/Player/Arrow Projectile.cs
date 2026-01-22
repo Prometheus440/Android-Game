@@ -37,6 +37,7 @@ public class ArrowProjectile : MonoBehaviour
 			shot = Instantiate(arrowPrefab); // Only do this if pool is empty
 		}
 
+		Handheld.Vibrate();
 		shot.transform.rotation = bowObject.transform.rotation;
 		shot.transform.position = bowObject.transform.position - offset;
 		shot.GetComponent<Rigidbody2D>().velocity = shot.transform.up * speed;
