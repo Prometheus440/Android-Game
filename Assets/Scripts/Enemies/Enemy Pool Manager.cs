@@ -43,7 +43,7 @@ public class EnemyPoolManager : MonoBehaviour
 
     void InitializePools()
     {
-		// Add enemies to the queues
+		// Add enemies to the queues from the pool game objects
 		foreach (Transform child in basicEnemyPoolParent)
 		{
 			child.gameObject.SetActive(false);
@@ -90,7 +90,7 @@ public class EnemyPoolManager : MonoBehaviour
 
             if (enemy != null)
             {
-                enemy.transform.position = spawnPos[i];
+                enemy.transform.position = spawnPos[i]; // Spawn position
                 enemy.SetActive(true); // Active in heirarchy
                 activeEnemyCount++; // Track number of active enemies
             }
@@ -141,12 +141,12 @@ public class EnemyPoolManager : MonoBehaviour
         List<int> types = new List<int>();
 
         // Mix of enemy types
-        // 0 = basic, 1 = fast, 2 = tank
         int basicCount = Mathf.CeilToInt(count * 0.5f); // 50% basic
         int fastCount = Mathf.CeilToInt(count * 0.3f); // 30% fast
         int tankCount = count - (basicCount + fastCount); // 20% tank
 
         // Add types to pool
+        // Values from GetEnemyFromPool switch
         for (int i = 0; i < basicCount; i++)
         {
             types.Add(0);
@@ -176,6 +176,8 @@ public class EnemyPoolManager : MonoBehaviour
     {
         Queue<GameObject> pool = null;
 
+        // If enemy type is x, then pool = xPool
+        // 0 = basic, 1 = fast, 2 = tank
         switch (enemyType)
         {
             case 0: pool = basicEnemyPool;
@@ -207,6 +209,7 @@ public class EnemyPoolManager : MonoBehaviour
 
     public void ReturnEnemyToPool(GameObject enemy)
     {
+        // Turn off enemy and decrease active count
         enemy.SetActive(false);
         activeEnemyCount--;
 
@@ -227,6 +230,7 @@ public class EnemyPoolManager : MonoBehaviour
 
     bool AreAllEnemiesDefeated()
     {
+        // Look to see if any enemies are still active or spawning
         return !isSpawningWave && activeEnemyCount <= 0;
     }
 }

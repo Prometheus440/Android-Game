@@ -30,11 +30,11 @@ public class UIManager : MonoBehaviour
 	{
 		// Unsubscribe to enemy kill events
 		Enemy.OnEnemyKilled -= AddScore;
-
 	}
 
 	public void UpdateLives(int currentLives)
 	{
+		// Update UI
 		currentLives = Mathf.Clamp(currentLives, 0, heartsSprite.Length - 1);
 		livesImage.sprite = heartsSprite[currentLives];
 	}

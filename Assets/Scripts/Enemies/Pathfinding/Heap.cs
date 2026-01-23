@@ -9,7 +9,6 @@ using UnityEngine;
 /// <typeparam name="T">Used to store nodes</typeparam>
 public class Heap<T> where T : IHeapElement<T>
 {
-
     T[] array;
     int currentLength;
 
@@ -117,9 +116,7 @@ public class Heap<T> where T : IHeapElement<T>
             }
         }
     }
-
 }
-
 
 public interface IHeapElement<T> : IComparable<T>
 {

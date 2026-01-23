@@ -16,6 +16,7 @@ public class HealItem : MonoBehaviour
 		// If collision with an arrow
 		if (collision.gameObject.CompareTag("Arrow"))
 		{
+			// Heal player half a heart
 			playerScript.Heal(1);
 			Destroy(collision.gameObject);
 			Destroy(gameObject);

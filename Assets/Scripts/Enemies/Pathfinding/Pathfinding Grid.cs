@@ -10,7 +10,7 @@ public class PathfindingGrid : MonoBehaviour
 	Node[,] grid;
 	Vector2 gridSize;
 	LayerMask obstacleLayer;
-	public float nodeSize = 0.5f;
+	public float nodeSize = 0.1f;
 	Vector2 gridNodes;
 	Heap<Node> openSet;
 	HashSet<Node> closedSet;
