@@ -10,15 +10,25 @@ public class Player : MonoBehaviour
 	private Animator fireAnimation;
 	public int health = 6;
 	private bool canFire = true;
-	private enum InputMode { Touch, Accel, Swipe }
+
+    // Input modes
+    private enum InputMode { Touch, Accel, Swipe }
 	private InputMode inpMode = InputMode.Touch;
 	Vector2 fingerDown;
 	Vector2 fingerUp;
 	Gyroscope m_Gyro;
 	Vector3 rot;
+    Vector2 fingerTouchDown;
+    Vector2 fingerTouchUp;
+    GameObject regularArrow;
+    GameObject explosiveArrow;
+    GameObject enchantedArrow;
+    Transform middleArrow;
+    Transform leftArrow;
+    Transform rightArrow;
 
-	// Animation times
-	[SerializeField] private float arrowReleaseTime = 0.4f;
+    // Animation times
+    [SerializeField] private float arrowReleaseTime = 0.4f;
 	[SerializeField] private float animationDuration = 0.83f;
 	private bool isFiring;
 
@@ -31,57 +41,171 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
+        //Getting the scripts and sprite
 		bowSprite = GetComponent<SpriteRenderer>();
 		UIManagerScript.UpdateLives(health);
 		arrowProjectileScript = GetComponent<ArrowProjectile>();
 		fireAnimation = GetComponent<Animator>();
-		m_Gyro = Input.gyro;
-		Input.gyro.enabled = true;
-	}
+
+        //Enable's gyro and stores inputs in m_gyro
+        m_Gyro = Input.gyro;
+        Input.gyro.enabled = true;
+
+        //Game objects to cycle between arrows shown
+        regularArrow = GameObject.Find("Regular Arrow");
+        explosiveArrow = GameObject.Find("Explosive Arrow");
+        enchantedArrow = GameObject.Find("Enchanted Arrow");
+
+        //Game objects used to switch the position of arrows shown
+        middleArrow = GameObject.Find("Middle Arrow").GetComponent<Transform>();
+        leftArrow = GameObject.Find("Left Arrow").GetComponent<Transform>();
+        rightArrow = GameObject.Find("Right Arrow").GetComponent<Transform>();
+    }
 
 	void Update()
 	{
-		if (inpMode == InputMode.Touch)
-		{
-			Shoot();
-		}
+        //Gets values needed to check if the player has tapped or swiped on the screen
+        if (Input.touchCount == 1)
+        {
+            if (Input.touches[0].phase == TouchPhase.Began)
+            {
+                fingerTouchDown = Input.touches[0].position;
+            }
+            if (Input.touches[0].phase == TouchPhase.Ended)
+            {
+                fingerTouchUp = Input.touches[0].position;
+                CheckSwipe();//Fires bow or changes arrow type based on input
+            }
+        }
+        GyroInput();//Rotatates player based on device tilt
+    }
 
-		if (!isFiring)
-		{
-			TestGyro();
-		}
-	}
+    void CheckSwipe()
+    {
+        //Checks the swipe value to determine direction or if pressed
+        if (fingerTouchDown.x - fingerTouchUp.x < -100)
+        {
+            SwipeRight();
+        }
+        if (fingerTouchDown.x - fingerTouchUp.x > 100)
+        {
+            SwipeLeft();
+        }
+        if (fingerTouchDown.x - fingerTouchUp.x > -100 && fingerTouchDown.x - fingerTouchUp.x < 100)
+        {
+            Shoot();
+        }
+    }
+    void SwipeLeft()
+    {
+        //Checks which arrow is currently equiped and changes it respectively
+        if (regularArrow.transform.position == middleArrow.position)
+        {
+            ArrowPositionLeft1();
+            return;
+        }
+        if (regularArrow.transform.position == leftArrow.position)
+        {
+            ArrowPositionLeft2();
+            return;
+        }
+        if (regularArrow.transform.position == rightArrow.position)
+        {
+            ArrowPositionLeft3();
+            return;
+        }
+    }
 
-	void TestGyro()
-	{
-		Quaternion quat = Quaternion.Euler(rot);
-		// Output the rotation rate, attitude and the enabled state of the gyroscope as a Label
-		// Debug.Log("Gyro attitude" + m_Gyro.attitude);
+    void SwipeRight()
+    {
+        //Checks which arrow is currently equiped and changes it respectively
+        if (regularArrow.transform.position == middleArrow.position)
+        {
+            ArrowPositionRight1();
+            return;
+        }
+        if (regularArrow.transform.position == rightArrow.position)
+        {
+            ArrowPositionRight2();
+            return;
+        }
+        if (regularArrow.transform.position == leftArrow.position)
+        {
+            ArrowPositionRight3();
+            return;
+        }
+    }
 
-		quat = GyroToUnity(Input.gyro.attitude);
-		transform.rotation = quat;
-	}
+    //Regular arrow in middle, moves all right
+    void ArrowPositionRight1()
+    {
+        explosiveArrow.transform.position = middleArrow.transform.position;
+        regularArrow.transform.position = rightArrow.transform.position;
+        enchantedArrow.transform.position = leftArrow.transform.position;
+    }
 
-	private static Quaternion GyroToUnity(Quaternion q)
-	{
-		return new Quaternion(0, 0, -q.y, q.w);
-	}
+    //Regular arrow on right, moves all right
+    void ArrowPositionRight2()
+    {
+        explosiveArrow.transform.position = rightArrow.transform.position;
+        regularArrow.transform.position = leftArrow.transform.position;
+        enchantedArrow.transform.position = middleArrow.transform.position;
+    }
 
-	private void ArrowType()
-	{
-		print("Swipe");
-	}
+    //Regular arrow on left, moves all right
+    void ArrowPositionRight3()
+    {
+        explosiveArrow.transform.position = leftArrow.transform.position;
+        regularArrow.transform.position = middleArrow.transform.position;
+        enchantedArrow.transform.position = rightArrow.transform.position;
+    }
 
+    //Regular arrow in middle, moves all left
+    void ArrowPositionLeft1()
+    {
+        explosiveArrow.transform.position = rightArrow.transform.position;
+        regularArrow.transform.position = leftArrow.transform.position;
+        enchantedArrow.transform.position = middleArrow.transform.position;
+    }
 
-	private void Shoot() //Shoots the bow
-	{
-		if (Input.touchCount > 0 && canFire)// When screen pressed
-		{
-			StartCoroutine(FireSequence());
-		}
-	}
+    //Regular arrow on left, moves all left
+    void ArrowPositionLeft2()
+    {
+        explosiveArrow.transform.position = middleArrow.transform.position;
+        regularArrow.transform.position = rightArrow.transform.position;
+        enchantedArrow.transform.position = leftArrow.transform.position;
+    }
 
-	private IEnumerator FireSequence()
+    //Regular arrow on right, moves all left
+    void ArrowPositionLeft3()
+    {
+        explosiveArrow.transform.position = leftArrow.transform.position;
+        regularArrow.transform.position = middleArrow.transform.position;
+        enchantedArrow.transform.position = rightArrow.transform.position;
+    }
+
+    void GyroInput()
+    {
+        transform.rotation = GyroToUnity(Input.gyro.attitude);
+    }
+
+    //Returns 
+    private static Quaternion GyroToUnity(Quaternion q)
+    {
+        return new Quaternion(0, 0, -q.y, q.w);
+
+    }
+
+    private void Shoot() //Shoots the bow
+    {
+        if (Input.touchCount > 0)//When screen pressed
+        {
+            fireAnimation = GetComponent<Animator>();
+            fireAnimation.SetTrigger("Fire"); //Plays firing animation
+        }
+    }
+
+    private IEnumerator FireSequence()
 	{
 		canFire = false;
 		isFiring = true;
