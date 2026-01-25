@@ -10,12 +10,11 @@ public class EnemyPoolManager : MonoBehaviour
     [SerializeField] private Transform tankEnemyPoolParent;
 
 	// Wave variables
-	private int waveSize = 10;
-    private float timeBetweenWaves = 3f;
-    private float spawnDelay = 1.5f;
+	private int waveSize = 20;
+    private float timeBetweenWaves = 5f;
+    private float spawnDelay = 0.5f;
 
     // Pool variables
-    private int poolSizePerType = 5;
     private int activeEnemyCount = 0;
 
     private Queue<GameObject> basicEnemyPool = new Queue<GameObject>();
@@ -72,7 +71,7 @@ public class EnemyPoolManager : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnWave()
+    public IEnumerator SpawnWave()
     {
         isSpawningWave = true;
         activeEnemyCount = 0; // Reset per wave
@@ -228,7 +227,7 @@ public class EnemyPoolManager : MonoBehaviour
         }
     }
 
-    bool AreAllEnemiesDefeated()
+    public bool AreAllEnemiesDefeated()
     {
         // Look to see if any enemies are still active or spawning
         return !isSpawningWave && activeEnemyCount <= 0;
