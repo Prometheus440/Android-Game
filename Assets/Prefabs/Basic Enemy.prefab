@@ -127,6 +127,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cac65754e87cd6499d483819932c03e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowHitAudio: {fileID: 8300000, guid: 2a138e774f2f4ad439a45bc4562c70e7, type: 3}
+  deathAudio: {fileID: 8300000, guid: e61f09af032faeb4bb5c6dd4ae2e4f8d, type: 3}
 --- !u!61 &2601123906672405858
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -14,6 +14,9 @@ public abstract class Enemy : MonoBehaviour
 	public static event System.Action<Vector2> OnEnemyDeath; // For collecting position for healing
 	public static event System.Action<int> OnEnemyKilled; // For collecting score per enemy
 
+	[SerializeField] private AudioClip arrowHitAudio;
+	[SerializeField] private AudioClip deathAudio;
+
 	protected EnemyPoolManager poolManager;
 
 	public void SetPoolManager(EnemyPoolManager manager)
@@ -36,12 +39,18 @@ public abstract class Enemy : MonoBehaviour
 			health--;
 			Destroy(collision.gameObject);
 
-			if (health <= 0)
+			if (health < 0)
+			{
+				AudioSource.PlayClipAtPoint(arrowHitAudio, transform.position, 1f); // Sound effect
+			}
+			else if (health <= 0)
 			{
 				// Invoke events before returning enemy to pool
 				OnEnemyDeath?.Invoke(transform.position);
 				OnEnemyKilled?.Invoke(scoreValue);
-				
+
+				AudioSource.PlayClipAtPoint(deathAudio, transform.position, 1f); // Sound effect
+
 				if (poolManager != null)
 				{
 					poolManager.ReturnEnemyToPool(gameObject);

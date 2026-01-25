@@ -3,7 +3,9 @@ guid: 8d47443c21c749f4890cee63ef8a7046
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - UIManagerScript: {instanceID: 0}
+  - arrowReleaseAudio: {fileID: 8300000, guid: b34f8410acb8948459451bed5d11749b, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

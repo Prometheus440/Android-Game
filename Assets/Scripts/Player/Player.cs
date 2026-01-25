@@ -10,9 +10,10 @@ public class Player : MonoBehaviour
 	private Animator fireAnimation;
 	public int health = 6;
 	private bool canFire = true;
+	[SerializeField] private AudioClip arrowReleaseAudio;
 
-    // Input modes
-    private enum InputMode { Touch, Accel, Swipe }
+	// Input modes
+	private enum InputMode { Touch, Accel, Swipe }
 	private InputMode inpMode = InputMode.Touch;
 	Vector2 fingerDown;
 	Vector2 fingerUp;
@@ -215,6 +216,7 @@ public class Player : MonoBehaviour
 		fireAnimation.Rebind();
 		fireAnimation.Update(0f);
 		fireAnimation.Play("EnchantedBowFire", 0, 0f); // Plays firing animation
+        AudioSource.PlayClipAtPoint(arrowReleaseAudio, transform.position, 1f); // Sound effect
 
 		// Wait to spawn arrow prefab
 		yield return new WaitForSeconds(arrowReleaseTime);
