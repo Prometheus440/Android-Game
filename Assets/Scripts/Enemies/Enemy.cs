@@ -45,7 +45,7 @@ public abstract class Enemy : MonoBehaviour
 		// If collision with an arrow
 		if (collision.gameObject.CompareTag("Regular Arrow") || collision.gameObject.CompareTag("Explosive Arrow") || collision.gameObject.CompareTag("Enchanted Arrow") || collision.gameObject.CompareTag("Explosion"))
 		{
-			if (collision.gameObject.CompareTag("Regular Arrow") || collision.gameObject.CompareTag("Explosive Arrow") || collision.gameObject.CompareTag("Enchanted Arrow"))
+			if (collision.gameObject.CompareTag("Regular Arrow") || collision.gameObject.CompareTag("Explosive Arrow"))
 			{
 				ArrowPoolManager.Instance.ReturnArrowToPool(collision.gameObject);
 			}

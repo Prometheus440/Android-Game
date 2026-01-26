@@ -198,16 +198,22 @@ public class Player : MonoBehaviour
 
     private void Shoot() //Shoots the bow
     {
-        if (Input.touchCount > 0)//When screen pressed
+        if (Input.touchCount > 0 && !isFiring && ArrowPoolManager.Instance.CanFire()) // When screen pressed
         {
             fireAnimation = GetComponent<Animator>();
-            fireAnimation.SetTrigger("Fire"); //Plays firing animation
+            fireAnimation.SetTrigger("Fire"); // Plays firing animation
             StartCoroutine(FireSequence());
         }
     }
 
     private IEnumerator FireSequence()
 	{
+        // Check to see if it can fire before anything else
+        if (!ArrowPoolManager.Instance.CanFire())
+        {
+            yield break;
+        }
+
 		canFire = false;
 		isFiring = true;
 

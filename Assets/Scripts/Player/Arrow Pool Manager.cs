@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class ArrowPoolManager : MonoBehaviour
@@ -16,8 +17,13 @@ public class ArrowPoolManager : MonoBehaviour
 	[SerializeField] private float speed = 10.0f;
 	[SerializeField] private Vector3 offset;
 
-	private Queue<GameObject> arrowPool = new Queue<GameObject>();
-	private int poolSize = 10;
+	// Cooldowns
+	private float cooldownDuration;
+	private float regCooldown = 0.5f;
+	private float explCooldown = 4f;
+	private float enchCooldown = 2.5f;
+	private bool canFire = true;
+	private float elapsedTime = 0;
 
 	public static ArrowPoolManager Instance;
 
@@ -31,7 +37,21 @@ public class ArrowPoolManager : MonoBehaviour
 		InitializePools();
 	}
 
-	void InitializePools()
+	private void Update()
+	{
+		if (!canFire)
+		{
+			elapsedTime += Time.deltaTime;
+
+			if (elapsedTime >= cooldownDuration)
+			{
+				canFire = true;
+				elapsedTime = 0;
+			}
+		}
+    }
+
+    void InitializePools()
 	{
 		// Add enemies to the queues from the pool game objects
 		foreach (Transform child in regArrowPoolParent)
@@ -51,8 +71,18 @@ public class ArrowPoolManager : MonoBehaviour
 		}
 	}
 
+	public bool CanFire()
+	{
+		return canFire;
+	}
+
 	public void SpawnArrow(int arrowType)
 	{
+		if (!canFire)
+		{
+			return;
+		}
+
 		GameObject arrow = GetArrowFromPool(arrowType);
 
 		if (arrow == null)
@@ -64,8 +94,35 @@ public class ArrowPoolManager : MonoBehaviour
 		arrow.transform.rotation = bowObject.transform.rotation;
 		arrow.transform.position = bowObject.transform.position - offset;
 		arrow.GetComponent<Rigidbody2D>().velocity = arrow.transform.up * speed;
-
 		Handheld.Vibrate();
+
+		//Cooldown
+		SetCoolDownDuration(arrowType);
+		StartCooldown();
+	}
+
+	void StartCooldown()
+	{
+		canFire = false;
+		elapsedTime = 0;
+	}
+
+	public void SetCoolDownDuration(int arrowType)
+	{
+		// If arrow type = x then cooldown is y
+		switch (arrowType)
+		{
+			case 0:
+				cooldownDuration = regCooldown;
+				break;
+			case 1:
+				cooldownDuration = explCooldown;
+				break;
+			case 2:
+				cooldownDuration = enchCooldown;
+				break;
+
+		}
 	}
 
 	GameObject GetArrowFromPool(int arrowType)

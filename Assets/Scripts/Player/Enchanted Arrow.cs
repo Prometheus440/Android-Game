@@ -30,7 +30,6 @@ public class EnchantedArrow : MonoBehaviour
 
 			hitEnemies.Add(enemy);
 			pierceNumber--;
-			Debug.Log($"Pierced enemy. Remaining: {pierceNumber}");
 
 			if (pierceNumber <= 0)
 			{
