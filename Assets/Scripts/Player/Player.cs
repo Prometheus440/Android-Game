@@ -192,7 +192,7 @@ public class Player : MonoBehaviour
     //Returns 
     private static Quaternion GyroToUnity(Quaternion q)
     {
-        return new Quaternion(0, 0, -q.x, q.w);
+        return new Quaternion(0, 0, -q.y, q.w);
 
     }
 
