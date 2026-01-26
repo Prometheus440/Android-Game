@@ -18,10 +18,10 @@ public class HealItem : MonoBehaviour
 		Moving();
 	}
 
-	void OnCollisionEnter2D(Collision2D collision)
+	void OnTriggerEnter2D(Collider2D collision)
 	{
 		// If collision with an arrow
-		if (collision.gameObject.CompareTag("Arrow"))
+		if (collision.gameObject.CompareTag("Regular Arrow") || collision.gameObject.CompareTag("Explosive Arrow") || collision.gameObject.CompareTag("Enchanted Arrow"))
 		{
 			// Heal player half a heart
 			playerScript.Heal(1);

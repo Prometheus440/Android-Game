@@ -11,15 +11,24 @@ public abstract class Enemy : MonoBehaviour
 	protected int scoreValue;
     protected float movementSpeed;
 
+	private SpriteRenderer enemySprite;
+
 	public static event System.Action<Vector2> OnEnemyDeath; // For collecting position for healing
 	public static event System.Action<int> OnEnemyKilled; // For collecting score per enemy
 
 	[SerializeField] private AudioClip arrowHitAudio;
 	[SerializeField] private AudioClip deathAudio;
+	private AudioSource audioSource;
 
 	protected EnemyPoolManager poolManager;
 
-	public void SetPoolManager(EnemyPoolManager manager)
+    private void Awake()
+    {
+		audioSource = GetComponent<AudioSource>();
+		enemySprite = GetComponent<SpriteRenderer>();
+    }
+
+    public void SetPoolManager(EnemyPoolManager manager)
 	{
 		poolManager = manager;
 	}
@@ -31,17 +40,22 @@ public abstract class Enemy : MonoBehaviour
 		health = spawnHealth;
 	}
 
-	void OnCollisionEnter2D(Collision2D collision)
+	void OnTriggerEnter2D(Collider2D collision)
 	{
 		// If collision with an arrow
-		if (collision.gameObject.CompareTag("Arrow"))
+		if (collision.gameObject.CompareTag("Regular Arrow") || collision.gameObject.CompareTag("Explosive Arrow") || collision.gameObject.CompareTag("Enchanted Arrow") || collision.gameObject.CompareTag("Explosion"))
 		{
-			health--;
-			Destroy(collision.gameObject);
-
-			if (health < 0)
+			if (collision.gameObject.CompareTag("Regular Arrow") || collision.gameObject.CompareTag("Explosive Arrow") || collision.gameObject.CompareTag("Enchanted Arrow"))
 			{
-				AudioSource.PlayClipAtPoint(arrowHitAudio, transform.position, 1f); // Sound effect
+				ArrowPoolManager.Instance.ReturnArrowToPool(collision.gameObject);
+			}
+
+			health--;
+
+			if (health > 0)
+			{
+				// audioSource.PlayOneShot(arrowHitAudio); // Sound effect
+				StartCoroutine(FlashRed());
 			}
 			else if (health <= 0)
 			{
@@ -49,17 +63,22 @@ public abstract class Enemy : MonoBehaviour
 				OnEnemyDeath?.Invoke(transform.position);
 				OnEnemyKilled?.Invoke(scoreValue);
 
-				AudioSource.PlayClipAtPoint(deathAudio, transform.position, 1f); // Sound effect
+				audioSource.PlayOneShot(deathAudio); // Sound effect
 
-				if (poolManager != null)
-				{
-					poolManager.ReturnEnemyToPool(gameObject);
-				}
-				else
-				{
-					Destroy(gameObject);
-				}
+				poolManager.ReturnEnemyToPool(gameObject);
             }
+		}
+	}
+
+	// Flashing red after damage
+	private IEnumerator FlashRed()
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			enemySprite.color = Color.red;
+			yield return new WaitForSeconds(0.1f);
+			enemySprite.color = Color.white;
+			yield return new WaitForSeconds(0.1f);
 		}
 	}
 }

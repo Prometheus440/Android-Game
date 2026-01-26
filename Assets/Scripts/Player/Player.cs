@@ -6,7 +6,6 @@ public class Player : MonoBehaviour
 {
 	private SpriteRenderer bowSprite;
 	[SerializeField] private UIManager UIManagerScript;
-	private ArrowProjectile arrowProjectileScript;
 	private Animator fireAnimation;
 	public int health = 6;
 	private bool canFire = true;
@@ -45,7 +44,6 @@ public class Player : MonoBehaviour
         //Getting the scripts and sprite
 		bowSprite = GetComponent<SpriteRenderer>();
 		UIManagerScript.UpdateLives(health);
-		arrowProjectileScript = GetComponent<ArrowProjectile>();
 		fireAnimation = GetComponent<Animator>();
 
         //Enable's gyro and stores inputs in m_gyro
@@ -220,7 +218,8 @@ public class Player : MonoBehaviour
 
 		// Wait to spawn arrow prefab
 		yield return new WaitForSeconds(arrowReleaseTime);
-		arrowProjectileScript.SpawnArrow();
+        int arrowType = GetCurrentArrowType();
+        ArrowPoolManager.Instance.SpawnArrow(arrowType);
 
 		// Wait to be able to fire again
 		yield return new WaitUntil(() => fireAnimation.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f && !fireAnimation.IsInTransition(0));
@@ -258,7 +257,7 @@ public class Player : MonoBehaviour
 		Destroy(gameObject);
 	}
 
-	private void OnCollisionEnter2D(Collision2D collision)
+	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		// If collision with an enemy
 		GameObject enemy = collision.gameObject;
@@ -292,4 +291,22 @@ public class Player : MonoBehaviour
 			yield return new WaitForSeconds(0.1f);
 		}
 	}
+
+    int GetCurrentArrowType()
+    {
+        if (regularArrow.transform.position == middleArrow.position)
+        {
+            return 0;
+        }
+        else if (explosiveArrow.transform.position == middleArrow.position)
+        {
+            return 1;
+        }
+        else if (enchantedArrow.transform.position == middleArrow.position)
+        {
+            return 2;
+        }
+
+        return 0; // Default
+    }
 }

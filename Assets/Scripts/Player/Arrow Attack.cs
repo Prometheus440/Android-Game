@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class ArrowAttack : MonoBehaviour
 {
-	private ArrowProjectile arrowProjectileScript;
-
-	private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Heal")
+		if (collision.GetComponent<Enemy>() != null || collision.CompareTag("Heal"))
 		{
-			arrowProjectileScript.ReturnArrow(gameObject);
+			ArrowPoolManager.Instance.ReturnArrowToPool(gameObject);
 		}
 	}
 }
