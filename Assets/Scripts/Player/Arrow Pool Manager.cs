@@ -90,6 +90,16 @@ public class ArrowPoolManager : MonoBehaviour
 			return;
 		}
 
+		// Reset enchanted arrow when spawning
+		if (arrowType == 2)
+		{
+			EnchantedArrow enchArrow = arrow.GetComponent<EnchantedArrow>();
+			if (enchArrow != null)
+			{
+				enchArrow.ResetArrow();
+			}
+		}
+
 		arrow.SetActive(true);
 		arrow.transform.rotation = bowObject.transform.rotation;
 		arrow.transform.position = bowObject.transform.position - offset;

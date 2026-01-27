@@ -19,6 +19,23 @@ public class EnchantedArrow : MonoBehaviour
 		rb.velocity = rb.velocity.normalized * rb.velocity.magnitude;
 	}
 
+	private void Update()
+	{
+		// Return arrow to pool if it goes too far off screen
+		if (transform.position.y > Camera.main.transform.position.y + 15f ||
+			transform.position.y < Camera.main.transform.position.y - 15f)
+		{
+			ArrowPoolManager.Instance.ReturnArrowToPool(gameObject);
+		}
+	}
+
+	// Also add ResetArrow method
+	public void ResetArrow()
+	{
+		pierceNumber = initPierceNumber;
+		hitEnemies.Clear();
+	}
+
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		Enemy enemy = collision.GetComponentInParent<Enemy>();
