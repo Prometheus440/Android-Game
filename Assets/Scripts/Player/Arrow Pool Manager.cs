@@ -6,6 +6,7 @@ using UnityEngine;
 public class ArrowPoolManager : MonoBehaviour
 {
 	// Prefabs to be spawned
+	SettingsManager vibrate;
 	[SerializeField] private Transform regArrowPoolParent;
 	[SerializeField] private Transform explArrowPoolParent;
 	[SerializeField] private Transform enchArrowPoolParent;
@@ -34,6 +35,7 @@ public class ArrowPoolManager : MonoBehaviour
 
 	private void Start()
 	{
+		vibrate = GameObject.FindGameObjectWithTag("ActivateVibrate").GetComponent<SettingsManager>();
 		InitializePools();
 	}
 
@@ -104,7 +106,7 @@ public class ArrowPoolManager : MonoBehaviour
 		arrow.transform.rotation = bowObject.transform.rotation;
 		arrow.transform.position = bowObject.transform.position - offset;
 		arrow.GetComponent<Rigidbody2D>().velocity = arrow.transform.up * speed;
-		Handheld.Vibrate();
+		vibrate.TriggerVibration();
 
 		//Cooldown
 		SetCoolDownDuration(arrowType);
