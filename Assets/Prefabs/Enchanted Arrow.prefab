@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6832279963131662320}
   m_Layer: 11
   m_Name: Enchanted Arrow
-  m_TagString: Explosive Arrow
+  m_TagString: Enchanted Arrow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

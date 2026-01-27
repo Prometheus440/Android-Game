@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-	private SpriteRenderer bowSprite;
-	[SerializeField] private UIManager UIManagerScript;
-	private Animator fireAnimation;
-	public int health = 6;
-	private bool canFire = true;
-	[SerializeField] private AudioClip arrowReleaseAudio;
+    private SpriteRenderer bowSprite;
+    [SerializeField] private UIManager UIManagerScript;
+    private Animator fireAnimation;
+    public int health = 6;
+    private bool canFire = true;
+    [SerializeField] private AudioClip arrowReleaseAudio;
 
-	// Input modes
-	private enum InputMode { Touch, Accel, Swipe }
-	private InputMode inpMode = InputMode.Touch;
-	Vector2 fingerDown;
-	Vector2 fingerUp;
-	Gyroscope m_Gyro;
-	Vector3 rot;
+    // Input modes
+    private enum InputMode { Touch, Accel, Swipe }
+    private InputMode inpMode = InputMode.Touch;
+    Vector2 fingerDown;
+    Vector2 fingerUp;
+    Gyroscope m_Gyro;
+    Vector3 rot;
     Vector2 fingerTouchDown;
     Vector2 fingerTouchUp;
     GameObject regularArrow;
@@ -29,22 +29,28 @@ public class Player : MonoBehaviour
 
     // Animation times
     [SerializeField] private float arrowReleaseTime = 0.4f;
-	[SerializeField] private float animationDuration = 0.83f;
-	private bool isFiring;
+    [SerializeField] private float animationDuration = 0.83f;
+    private bool isFiring;
 
-	public static Player Instance;
+    // Animations
+    [SerializeField] private string regularBowAnimation = "RegularBowFire";
+    [SerializeField] private string explosiveBowAnimation = "ExplosiveBowFire";
+    [SerializeField] private string enchantedBowAnimation = "EnchantedBowFire";
+    private string currentBowAnimation = "RegularBowFire";
 
-	void Awake()
-	{
-		Instance = this;
-	}
+    public static Player Instance;
 
-	void Start()
-	{
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    void Start()
+    {
         //Getting the scripts and sprite
-		bowSprite = GetComponent<SpriteRenderer>();
-		UIManagerScript.UpdateLives(health);
-		fireAnimation = GetComponent<Animator>();
+        bowSprite = GetComponent<SpriteRenderer>();
+        UIManagerScript.UpdateLives(health);
+        fireAnimation = GetComponent<Animator>();
 
         //Enable's gyro and stores inputs in m_gyro
         m_Gyro = Input.gyro;
@@ -61,8 +67,8 @@ public class Player : MonoBehaviour
         rightArrow = GameObject.Find("Right Arrow").GetComponent<Transform>();
     }
 
-	void Update()
-	{
+    void Update()
+    {
         //Gets values needed to check if the player has tapped or swiped on the screen
         if (Input.touchCount == 1)
         {
@@ -76,9 +82,31 @@ public class Player : MonoBehaviour
                 CheckSwipe();//Fires bow or changes arrow type based on input
             }
         }
+
+        UpdateBowAnimation();
         GyroInput();//Rotatates player based on device tilt
     }
 
+    void UpdateBowAnimation()
+    {
+        string newAnimation = "";
+        
+        if (regularArrow.transform.position == middleArrow.transform.position)
+        {
+            newAnimation = regularBowAnimation;
+        }
+        else if (explosiveArrow.transform.position == middleArrow.transform.position)
+        {
+            newAnimation = explosiveBowAnimation;
+        }
+        else if (enchantedArrow.transform.position == middleArrow.transform.position)
+        {
+            newAnimation = enchantedBowAnimation;
+        }
+
+        currentBowAnimation = newAnimation;
+    }
+    
     void CheckSwipe()
     {
         //Checks the swipe value to determine direction or if pressed
@@ -218,7 +246,7 @@ public class Player : MonoBehaviour
 
 		fireAnimation.Rebind();
 		fireAnimation.Update(0f);
-		fireAnimation.Play("EnchantedBowFire", 0, 0f); // Plays firing animation
+		fireAnimation.Play(currentBowAnimation, 0, 0f); // Plays firing animation
         AudioSource.PlayClipAtPoint(arrowReleaseAudio, transform.position, 1f); // Sound effect
 
 		// Wait to spawn arrow prefab

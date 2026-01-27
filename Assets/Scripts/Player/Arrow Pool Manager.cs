@@ -19,9 +19,9 @@ public class ArrowPoolManager : MonoBehaviour
 
 	// Cooldowns
 	private float cooldownDuration;
-	private float regCooldown = 0.5f;
-	private float explCooldown = 4f;
-	private float enchCooldown = 2.5f;
+	private float regCooldown = 0.1f;
+	private float explCooldown = 1f;
+	private float enchCooldown = 0.5f;
 	private bool canFire = true;
 	private float elapsedTime = 0;
 

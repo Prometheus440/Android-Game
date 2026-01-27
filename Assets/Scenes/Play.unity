@@ -7484,7 +7484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerScript: {fileID: 1978721012}
-  healPrefab: {fileID: 2931458959239603060, guid: ea1ea36f7e16829498dd76cbe278ee86, type: 3}
+  healPrefab: {fileID: 4972137582779974781, guid: df8787ee6524d3b44b5ea975d5ea3203, type: 3}
 --- !u!4 &1408473052
 Transform:
   m_ObjectHideFlags: 0
@@ -8297,6 +8297,7 @@ MonoBehaviour:
   scoreText: {fileID: 1463699816}
   gameOverText: {fileID: 1860610025}
   gameManager: {fileID: 1194401999}
+  gameOverButton: {fileID: 0}
 --- !u!114 &1635690889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11397,6 +11398,9 @@ MonoBehaviour:
   arrowReleaseAudio: {fileID: 8300000, guid: b34f8410acb8948459451bed5d11749b, type: 3}
   arrowReleaseTime: 0.4
   animationDuration: 0.83
+  regularBowAnimation: RegularBowFire
+  explosiveBowAnimation: ExplosiveBowFire
+  enchantedBowAnimation: EnchantedBowFire
 --- !u!212 &1978721013
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11438,7 +11442,7 @@ SpriteRenderer:
   m_SortingLayerID: 639094629
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -505706462, guid: a0911d812bca1ee41903d4b4d6378471, type: 3}
+  m_Sprite: {fileID: 1972916125, guid: 9f527edd50940a4409e2b32bf946ae47, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -11500,7 +11504,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 19.14, y: 20.883707}
+    oldSize: {x: 19.146797, y: 20.88}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
