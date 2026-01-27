@@ -19,28 +19,36 @@ public class UIManager : MonoBehaviour
 	// Score
 	[SerializeField] private TMP_Text scoreText;
 	private int currentScore = 0;
+	[SerializeField] private TMP_Text highscoreText;
+	private int highscore = 0;
 
 	// Game Over
 	[SerializeField] private TMP_Text gameOverText;
 	[SerializeField] private GameManager gameManager;
-    [SerializeField] private Button gameOverButton;
+	[SerializeField] private Button gameOverButton;
 
-    void Start()
+	void Start()
 	{
 		gameOverText.enabled = false;
-        Enemy.OnEnemyKilled += AddScore; // Subscribe
+		Enemy.OnEnemyKilled += AddScore; // Subscribe
+		UpdateScore(0);
+
+		// Load highscore from PlayerPrefs
+		highscore = PlayerPrefs.GetInt("Highscore", 0);
+		UpdateHighscore();
 		UpdateScore(0);
 	}
 
-    private void Update()
-    {
-        if (gameManager.gameOver == true)
+	private void Update()
+	{
+		if (gameManager.gameOver == true)
 		{
-            gameOverText.enabled = true;
-        }
-    }
+			gameOverText.enabled = true;
+			SaveHighscore();
+		}
+	}
 
-    void OnDestroy()
+	void OnDestroy()
 	{
 		// Unsubscribe to enemy kill events
 		Enemy.OnEnemyKilled -= AddScore;
@@ -56,11 +64,42 @@ public class UIManager : MonoBehaviour
 	{
 		currentScore = score;
 		scoreText.text = "Score: " + currentScore.ToString();
+
+		// Check for highscore
+		if (currentScore > highscore)
+		{
+			highscore = currentScore;
+			UpdateHighscore();
+		}
 	}
 
 	public void AddScore(int score)
 	{
 		currentScore += score;
 		scoreText.text = "Score: " + currentScore.ToString();
+
+		// Check for highscore
+		if (currentScore > highscore)
+		{
+			highscore = currentScore;
+			UpdateHighscore();
+		}
+	}
+
+	private void UpdateHighscore()
+	{
+		if (highscoreText != null)
+		{
+			highscoreText.text = "Highscore: " + highscore.ToString();
+		}
+	}
+
+	void SaveHighscore()
+	{
+		if (currentScore > PlayerPrefs.GetInt("Highscore", 0))
+		{
+			PlayerPrefs.SetInt("Highscore", currentScore);
+			PlayerPrefs.Save(); // Force save to disk
+		}
 	}
 }
