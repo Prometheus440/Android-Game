@@ -20,13 +20,26 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private TMP_Text scoreText;
 	private int currentScore = 0;
 
-	void Start()
+	// Game Over
+	[SerializeField] private TMP_Text gameOverText;
+	[SerializeField] private GameManager gameManager;
+
+    void Start()
 	{
-		Enemy.OnEnemyKilled += AddScore; // Subscribe
+		gameOverText.enabled = false;
+        Enemy.OnEnemyKilled += AddScore; // Subscribe
 		UpdateScore(0);
 	}
 
-	void OnDestroy()
+    private void Update()
+    {
+        if (gameManager.gameOver == true)
+		{
+            gameOverText.enabled = true;
+        }
+    }
+
+    void OnDestroy()
 	{
 		// Unsubscribe to enemy kill events
 		Enemy.OnEnemyKilled -= AddScore;

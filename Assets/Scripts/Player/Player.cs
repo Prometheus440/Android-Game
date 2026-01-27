@@ -298,6 +298,17 @@ public class Player : MonoBehaviour
 		}
 	}
 
+    public int GetHealth()
+    {
+        return health;
+    }
+   
+    public void ResetHealth()
+    {
+        health = 6;
+        UIManagerScript.UpdateLives(health);
+    }
+
     int GetCurrentArrowType()
     {
         if (regularArrow.transform.position == middleArrow.position)

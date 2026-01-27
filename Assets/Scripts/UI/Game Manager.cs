@@ -7,6 +7,9 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private Transform background1;
 	[SerializeField] private Transform background2;
 
+	[SerializeField] private UIManager uiManager;
+	[SerializeField] private SceneManagerScript sceneManager;
+
 	public float scrollSpeed = 4f;
 	private float scrollDuration = 5f;
 	private float backgroundX = -2.148794f;
@@ -16,7 +19,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private EnemyPoolManager enemyPoolManager;
 
 	public bool isScrolling = false;
-	private bool gameOver;
+	public bool gameOver;
 
 	void Start()
 	{
@@ -25,8 +28,8 @@ public class GameManager : MonoBehaviour
 		background2.position = new Vector3(backgroundX, backgroundY + backgroundHeight, 0);
 	}
 
-    private void Update()
-    {
+	private void Update()
+	{
 		StartCoroutine(CheckWaveCompletion());
 
 		// Call scroll once per frame so in update()
@@ -34,7 +37,9 @@ public class GameManager : MonoBehaviour
 		{
 			ScrollBackgrounds();
 		}
-    }
+
+		GameOver();
+	}
 
 	IEnumerator CheckWaveCompletion()
 	{
@@ -52,7 +57,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-    IEnumerator ScrollSequence()
+	IEnumerator ScrollSequence()
 	{
 		isScrolling = true;
 		float elapsedTime = 0f;
@@ -84,4 +89,18 @@ public class GameManager : MonoBehaviour
 			background2.position = new Vector3(backgroundX, background1.position.y + backgroundHeight, 0);
 		}
 	}
+
+	void GameOver()
+	{
+		if (Player.Instance.GetHealth() <= 0)
+		{
+			gameOver = true;
+			isScrolling = false;
+		}
+	}
+
+	void Replay()
+	{
+		sceneManager.ChangeScene("Play");
+    }
 }

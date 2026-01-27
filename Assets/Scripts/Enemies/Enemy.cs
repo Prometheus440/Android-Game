@@ -5,11 +5,11 @@ using UnityEngine;
 public abstract class Enemy : MonoBehaviour
 {
 	// Enemy variables
-    protected int health;
+	protected int health;
 	protected int spawnHealth;
-    protected int damage;
+	protected int damage;
 	protected int scoreValue;
-    protected float movementSpeed;
+	protected float movementSpeed;
 
 	private SpriteRenderer enemySprite;
 
@@ -20,20 +20,20 @@ public abstract class Enemy : MonoBehaviour
 	[SerializeField] private AudioClip deathAudio;
 	private AudioSource audioSource;
 
-	protected EnemyPoolManager poolManager;
+	public EnemyPoolManager poolManager;
 
-    private void Awake()
-    {
+	private void Awake()
+	{
 		audioSource = GetComponent<AudioSource>();
 		enemySprite = GetComponent<SpriteRenderer>();
-    }
+	}
 
-    public void SetPoolManager(EnemyPoolManager manager)
+	public void SetPoolManager(EnemyPoolManager manager)
 	{
 		poolManager = manager;
 	}
 
-    protected abstract void Move();
+	protected abstract void Move();
 
 	public virtual void ResetEnemy()
 	{
