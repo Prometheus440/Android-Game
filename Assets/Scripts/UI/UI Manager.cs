@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
 	// Game Over
 	[SerializeField] private TMP_Text gameOverText;
 	[SerializeField] private GameManager gameManager;
+    [SerializeField] private Button gameOverButton;
 
     void Start()
 	{
