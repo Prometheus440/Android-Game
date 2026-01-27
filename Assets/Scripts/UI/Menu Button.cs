@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class MenuButtonScript : MonoBehaviour
 {
+
+    
     public void EnableMenu() //Calls the trigger bringing the menu to the screen
     {
+        Debug.Log("Test");
         GetComponent<Animator>().ResetTrigger("Disable");
         GetComponent<Animator>().SetTrigger("Enable");
     }

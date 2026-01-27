@@ -66,7 +66,6 @@ public class Player : MonoBehaviour
         //Gets values needed to check if the player has tapped or swiped on the screen
         if (Input.touchCount == 1)
         {
-            Debug.Log("Test");
             if (Input.touches[0].phase == TouchPhase.Began)
             {
                 fingerTouchDown = Input.touches[0].position;
