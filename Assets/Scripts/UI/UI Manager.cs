@@ -25,11 +25,12 @@ public class UIManager : MonoBehaviour
 	// Game Over
 	[SerializeField] private TMP_Text gameOverText;
 	[SerializeField] private GameManager gameManager;
-	[SerializeField] private Button gameOverButton;
+	[SerializeField] private GameObject gameOverButton;
 
 	void Start()
 	{
 		gameOverText.enabled = false;
+		gameOverButton.SetActive(false);
 		Enemy.OnEnemyKilled += AddScore; // Subscribe
 		UpdateScore(0);
 
@@ -43,6 +44,7 @@ public class UIManager : MonoBehaviour
 	{
 		if (gameManager.gameOver == true)
 		{
+			gameOverButton.SetActive(true);
 			gameOverText.enabled = true;
 			SaveHighscore();
 		}
